@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine 💖</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500;700&display=swap');body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #a1c4fd, #fbc2eb);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  perspective: 1000px;
+}
+
+.card {
+  background: linear-gradient(180deg, #ffffff, #f0f8ff);
+  padding: 30px;
+  width: 90%;
+  max-width: 440px;
+  border-radius: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px #ff4d6d, 0 0 40px #ff6b81;
+  text-align: center;
+  animation: pop 0.8s ease, glow 2s infinite alternate;
+  position: relative;
+  border: 4px solid #ff4d6d;
+}
+
+@keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes glow { 0% { box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px #ff4d6d, 0 0 40px #ff6b81; } 100% { box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 30px #ff6b81, 0 0 60px #ff4d6d; } }
+
+h1 { font-family: 'Pacifico', cursive; color: #1c7ed6; font-size: 34px; margin-bottom: 10px; }
+p { color: #364fc7; font-size: 16px; }
+.countdown { background: linear-gradient(135deg, #ff4d6d, #ff6b81); color: white; padding: 12px; border-radius: 20px; margin: 12px 0; font-weight: bold; box-shadow: 0 8px 20px rgba(255,77,109,0.4); }
+
+.photo { width: 100%; height: 220px; border-radius: 22px; border: 3px dashed #ff4d6d; margin: 15px 0; display: flex; justify-content: center; align-items: center; overflow: hidden; box-shadow: 0 0 15px #ff6b81; }
+.photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.buttons { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
+button { padding: 14px; font-size: 17px; border: none; border-radius: 35px; cursor: pointer; transition: 0.3s; position: relative; font-weight: bold; }
+
+.yes { background: linear-gradient(135deg, #ff4d6d, #ff6b81); color: white; box-shadow: 0 10px 25px rgba(255,77,109,0.5); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+.no { background: linear-gradient(135deg, #e7f5ff, #d0ebff); color: #1c7ed6; }
+.message { margin-top: 15px; color: #1971c2; font-weight: bold; min-height: 24px; }
+canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 999; }
+
+  </style>
+</head>
+<body>
+  <canvas id="fireworks"></canvas>
+  <div class="card">
+    <h1>Hey Alvin 💙</h1>
+    <p>I have a very serious question before Valentine’s Day 🥰</p><div class="countdown" id="countdown"></div>
+
+<div class="photo">
+  <img id="valentinePhoto" src="photo1.jpg" alt="Our Photo ❤️">
+</div>
+
+<p>Will you be my Valentine and officially call me your girlfriend? 😇💖</p>
+
+<div class="buttons">
+  <button class="yes" id="yesBtn" onclick="sayYes()">YES 😍</button>
+  <button class="no" onclick="reject(this)">No 😅</button>
+  <button class="no" onclick="reject(this)">Wewe sasa 😂</button>
+  <button class="no" onclick="runAway(this)">Maybe later 🙈</button>
+</div>
+
+<div class="message" id="message"></div>
+<p style="margin-top:12px; font-weight:bold;">Call/Text: +25401266726</p>
+
+  </div>  <audio id="bgm" loop>
+    <source src="perfect.mp3" type="audio/mpeg">
+  </audio>  <script>
+    const messages = [
+      "Sweetie please 😭 you’re breaking my heart 💔",
+      "We prayed about this 😇",
+      "Wewe sasa unaniumiza 😂💔",
+      "Love is patient… but I’m running out 😏",
+      "Just click YES bana 😌❤️"
+    ];
+    let count = 0;
+
+    function reject(btn) {
+      const msg = document.getElementById("message");
+      msg.textContent = messages[count % messages.length];
+      count++;
+      btn.style.display = "none";
+      growYes();
+      wiggleYes();
+    }
+
+    function runAway(btn) {
+      btn.style.position = "absolute";
+      btn.style.left = Math.random() * 220 + "px";
+      btn.style.top = Math.random() * 220 + "px";
+      document.getElementById("message").textContent = "Eii 😭 why chasing NO? 💔";
+      wiggleYes();
+    }
+
+    function growYes() {
+      const yes = document.getElementById('yesBtn');
+      yes.style.transform = `scale(${1 + count * 0.1})`;
+    }
+
+    function wiggleYes() {
+      const yes = document.getElementById('yesBtn');
+      yes.style.animation = 'wiggle 0.5s';
+      setTimeout(()=>{ yes.style.animation = 'pulse 2s infinite'; }, 500);
+    }
+
+    const valentine = new Date('Feb 14, 2026 00:00:00').getTime();
+    setInterval(() => {
+      const now = new Date().getTime();
+      const d = valentine - now;
+      const days = Math.floor(d / (1000 * 60 * 60 * 24));
+      document.getElementById('countdown').textContent = `⏳ ${days} days to Valentine’s Day 💖`;
+    }, 1000);
+
+    const photos = ["photo1.jpg", "photo2.jpg", "photo3.jpg"];
+    let currentPhoto = 0;
+    const photoElement = document.getElementById('valentinePhoto');
+    setInterval(() => {
+      currentPhoto = (currentPhoto + 1) % photos.length;
+      photoElement.src = photos[currentPhoto];
+    }, 3000);
+
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let hearts = [];
+    function createHeart(x, y, size, speedX, speedY) {
+      return {x, y, size, speedX, speedY, alpha: 1};
+    }
+
+    function launchFireworks() {
+      for(let i=0;i<50;i++){
+        const x = Math.random()*canvas.width;
+        const y = Math.random()*canvas.height/2;
+        const speedX = (Math.random()-0.5)*4;
+        const speedY = Math.random()*-3-2;
+        const size = Math.random()*6+6;
+        hearts.push(createHeart(x,y,size,speedX,speedY));
+      }
+      requestAnimationFrame(updateHearts);
+    }
+
+    function updateHearts(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for(let i=hearts.length-1;i>=0;i--){
+        const h=hearts[i];
+        h.x+=h.speedX;
+        h.y+=h.speedY;
+        h.speedY+=0.1;
+        h.alpha-=0.02;
+        if(h.alpha<=0){hearts.splice(i,1);continue;}
+        ctx.globalAlpha=h.alpha;
+        ctx.fillStyle='red';
+        ctx.font=h.size+'px Arial';
+        ctx.fillText('❤️',h.x,h.y);
+      }
+      ctx.globalAlpha=1;
+      if(hearts.length>0) requestAnimationFrame(updateHearts);
+    }
+
+    function sayYes() {
+      document.getElementById('bgm').play();
+      launchFireworks();
+      document.body.innerHTML = `
+        <div style="text-align:center; color:white; padding:40px;">
+          <h1>YAYYYYY 💖💖💖</h1>
+          <p>Congratulations! Screenshot this and send it 😇💌</p>
+          <p>‘Love is patient, love is kind’ – 1 Corinthians 13 💖</p>
+        </div>
+      `;
+    }
+  </script></body>
+</html>
